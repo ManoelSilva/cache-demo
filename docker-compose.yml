@@ -1,0 +1,32 @@
+version: '3.2'
+ 
+services:
+# DEMO
+    cache:
+      container_name: cache-demo
+      build:
+        context: .
+        dockerfile: ./Dockerfile
+      image: manoelsilva/cache-demo
+      ports:
+        - 8322:8322
+      depends_on:
+        - postgres
+# POSTGRES
+    postgres:
+      container_name: postgres
+      image: postgres
+      restart: always
+      ports:
+        - 8006:5432
+      environment:
+        - POSTGRES_USER=manoel
+        - POSTGRES_DB=cache
+        - POSTGRES_PASSWORD=manoelTouti
+# POSTGRES ADMINER 
+    adminer:
+      container_name: adminer
+      image: adminer
+      restart: always
+      ports:
+        - 8008:8080
