@@ -6,11 +6,11 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 public class Cache {
 	private static final Cache cacheInstance = new Cache();
 	private Map<String, Cacheable> cachedClasses = new HashMap<>();
 
+	@Getter
 	@Setter
 	private Long timestamp;
 

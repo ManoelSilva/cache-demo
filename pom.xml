@@ -14,17 +14,17 @@
 	</parent>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>14</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
 		<sonar.coverage.exclusions>
-			src/main/java/br/unifor/**/mapper/*.java,
-			src/main/java/br/unifor/**/config/*.java,
-			src/main/java/br/unifor/**/entity/*.java,
-			src/main/java/br/unifor/**/App.java,
-			src/main/java/br/unifor/**/ServletInitializer.java
+			src/main/java/com/**/mapper/*.java,
+			src/main/java/com/**/config/*.java,
+			src/main/java/com/**/entity/*.java,
+			src/main/java/com/**/App.java,
+			src/main/java/com/**/ServletInitializer.java
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -72,6 +72,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -86,8 +93,8 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>14</source>
+					<target>14</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
@@ -118,11 +125,10 @@
 				<version>0.8.0</version>
 				<configuration>
 					<excludes>
-						<exclude>br/com/**/mapper/*.class</exclude>
-						<exclude>br/com/**/config/*.class</exclude>
-						<exclude>br/com/**/entity/*.class</exclude>
-						<exclude>br/com/**/*App.class</exclude>
-						<exclude>br/com/**/*ServletInitializer.class</exclude>
+						<exclude>com/**/config/*.class</exclude>
+						<exclude>com/**/entity/*.class</exclude>
+						<exclude>com/**/*App.class</exclude>
+						<exclude>com/**/*ServletInitializer.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>
