@@ -18,25 +18,33 @@ public class Cache {
 
 	public CacheableModel getSingleCacheable(String cacheableClassName, Integer id, final CacheableActions action) {
 		Long currentTime = System.currentTimeMillis();
-		if (this.isFirstTimeCache(cacheableClassName)
-				|| this.isCurrentTimeMinusCacheTimestampGreatherThanCacheTimeCriteria(currentTime,
-						this.getCached(cacheableClassName))) {
+		if (this.isSetCachedNeeded(cacheableClassName, id, currentTime)) {
 			this.timestamp = currentTime;
 			this.setCache(cacheableClassName, action.executeSingleFetch(id));
 		}
 		return this.getCached(cacheableClassName);
 	}
 
-	private Boolean isFirstTimeCache(final String cacheableClassName) {
+	protected boolean isSetCachedNeeded(String cacheableClassName, Integer id, Long currentTime) {
+		return this.isFirstTimeCache(cacheableClassName) || this.isCachedNotTheSameAsRequested(cacheableClassName, id)
+				|| this.isCurrentTimeMinusCacheTimestampGreatherThanCacheTimeCriteria(currentTime,
+						this.getCached(cacheableClassName));
+	}
+
+	private boolean isFirstTimeCache(final String cacheableClassName) {
 		return Boolean.FALSE.equals(this.hasCached(cacheableClassName));
 	}
 
-	private Boolean isCurrentTimeMinusCacheTimestampGreatherThanCacheTimeCriteria(final Long currentTime,
-			CacheableModel cacheable) {
-		return (currentTime - this.timestamp) > cacheable.getCacheTimeCriteria();
+	private boolean isCachedNotTheSameAsRequested(String cacheableClassName, Integer id) {
+		return Boolean.FALSE.equals(this.getCached(cacheableClassName).getId().equals(id));
 	}
 
-	private Boolean hasCached(String cacheableClassName) {
+	private boolean isCurrentTimeMinusCacheTimestampGreatherThanCacheTimeCriteria(final Long currentTime,
+			CacheableModel cacheable) {
+		return Boolean.TRUE.equals((currentTime - this.timestamp) > cacheable.getCacheTimeCriteria());
+	}
+
+	private boolean hasCached(String cacheableClassName) {
 		return this.cachedClasses.containsKey(cacheableClassName);
 	}
 
