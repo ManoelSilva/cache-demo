@@ -7,21 +7,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.cache.Cacheable;
-import com.demo.service.CacheService;
+import com.demo.cache.CacheableModel;
+import com.demo.service.DataService;
 
 @RestController
 @RequestMapping("/api/data")
 public class DataController {
-	private final CacheService cacheService;
+	private final DataService dataService;
 
 	@Autowired
-	public DataController(CacheService cacheService) {
-		this.cacheService = cacheService;
+	public DataController(DataService cacheService) {
+		this.dataService = cacheService;
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Cacheable> getData(@PathVariable Integer id) {
-		return ResponseEntity.ok(cacheService.getData(id));
+	public ResponseEntity<CacheableModel> getData(@PathVariable Integer id) {
+		return ResponseEntity.ok(dataService.getData(id));
 	}
 }

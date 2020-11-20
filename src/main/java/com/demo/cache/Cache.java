@@ -3,15 +3,9 @@ package com.demo.cache;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class Cache {
 	private static final Cache cacheInstance = new Cache();
-	private Map<String, Cacheable> cachedClasses = new HashMap<>();
-
-	@Getter
-	@Setter
+	private Map<String, CacheableModel> cachedClasses = new HashMap<>();
 	private Long timestamp;
 
 	private Cache() {
@@ -22,15 +16,35 @@ public class Cache {
 		return cacheInstance;
 	}
 
-	public void setCached(String className, Cacheable cacheable) {
+	public CacheableModel getSingleCacheable(String cacheableClassName, Integer id, final CacheableActions action) {
+		Long currentTime = System.currentTimeMillis();
+		if (this.isFirstTimeCache(cacheableClassName)
+				|| this.isCurrentTimeMinusCacheTimestampGreatherThanCacheTimeCriteria(currentTime,
+						this.getCached(cacheableClassName))) {
+			this.timestamp = currentTime;
+			this.setCache(cacheableClassName, action.executeSingleFetch(id));
+		}
+		return this.getCached(cacheableClassName);
+	}
+
+	private Boolean isFirstTimeCache(final String cacheableClassName) {
+		return Boolean.FALSE.equals(this.hasCached(cacheableClassName));
+	}
+
+	private Boolean isCurrentTimeMinusCacheTimestampGreatherThanCacheTimeCriteria(final Long currentTime,
+			CacheableModel cacheable) {
+		return (currentTime - this.timestamp) > cacheable.getCacheTimeCriteria();
+	}
+
+	private Boolean hasCached(String cacheableClassName) {
+		return this.cachedClasses.containsKey(cacheableClassName);
+	}
+
+	private void setCache(String className, CacheableModel cacheable) {
 		this.cachedClasses.put(className, cacheable);
 	}
 
-	public Cacheable getCached(String className) {
+	private CacheableModel getCached(String className) {
 		return this.cachedClasses.get(className);
-	}
-
-	public Boolean hasCached(String cacheableClassName) {
-		return this.cachedClasses.containsKey(cacheableClassName);
 	}
 }

@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import com.demo.cache.Cacheable;
+import com.demo.cache.CacheableModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @lombok.Data
-public class Data implements Cacheable {
+public class Data implements CacheableModel {
 	@Transient
 	@JsonIgnore
 	private Long timeToRenewCache = 10 * 3000L;
@@ -26,5 +26,10 @@ public class Data implements Cacheable {
 	@Override
 	public Long getCacheTimeCriteria() {
 		return this.timeToRenewCache;
+	}
+
+	public Data(Integer id, String message) {
+		this.id = id;
+		this.message = message;
 	}
 }
