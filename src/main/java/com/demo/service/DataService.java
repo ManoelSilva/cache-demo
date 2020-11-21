@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.cache.Cache;
-import com.demo.cache.CacheableActions;
+import com.demo.cache.CacheableAction;
 import com.demo.cache.CacheableModel;
 import com.demo.repository.DataRepository;
 import com.demo.repository.entity.Data;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class DataService implements CacheableActions {
+public class DataService implements CacheableAction {
 	private static final String FETCHING_DATA_MSG = "Fetching data from database..";
 	private final DataRepository dataRepository;
 	private final Cache cache;

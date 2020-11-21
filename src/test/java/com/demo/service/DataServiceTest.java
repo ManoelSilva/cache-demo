@@ -18,11 +18,17 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.demo.DemoTest;
+import com.demo.cache.Cache;
+import com.demo.cache.CacheableModel;
 import com.demo.repository.DataRepository;
+import com.demo.repository.entity.Data;
 
 public class DataServiceTest extends DemoTest {
 	@Mock
 	private DataRepository repository;
+
+	@Mock
+	private Cache cache;
 
 	@InjectMocks
 	private DataService service;
@@ -35,17 +41,33 @@ public class DataServiceTest extends DemoTest {
 
 	@Test
 	public void getDataTest() {
-		when(this.repository.findById(ID_MOCK)).thenReturn(this.getDataMock());
+		Optional<Data> dataMock = this.getDataMock(NUMBER_ONE);
+		when(this.repository.findById(NUMBER_ONE)).thenReturn(dataMock);
+		assertEquals(dataMock.get(), this.service.getData(NUMBER_ONE));
+		verify(this.repository, atLeastOnce()).findById(NUMBER_ONE);
+	}
 
-		assertEquals(this.getDataMock().get(), this.service.getData(ID_MOCK));
-		verify(this.repository, atLeastOnce()).findById(ID_MOCK);
+	@Test
+	public void getDataCachedAndNotCachedYetTest() {
+		Optional<Data> dataTwoMock = this.getDataMock(NUMBER_TWO);
+
+		when(this.repository.findById(NUMBER_ONE)).thenReturn(this.getDataMock(NUMBER_ONE));
+		when(this.repository.findById(NUMBER_TWO)).thenReturn(dataTwoMock);
+
+		CacheableModel dataOneMockFirstCall = this.service.getData(NUMBER_ONE);
+		CacheableModel dataOneMockSecondCall = this.service.getData(NUMBER_ONE);
+
+		assertEquals(dataOneMockFirstCall, dataOneMockSecondCall);
+		verify(this.repository, Mockito.times(NUMBER_ONE)).findById(NUMBER_ONE);
+
+		assertEquals(dataTwoMock.get(), this.service.getData(NUMBER_TWO));
+		verify(this.repository, atLeastOnce()).findById(NUMBER_TWO);
 	}
 
 	@Test
 	public void getDataEntityNotFoundTest() {
-		when(this.repository.findById(ID_MOCK)).thenReturn(Optional.empty());
-
-		assertThrows(EntityNotFoundException.class, () -> this.service.getData(ID_MOCK));
-		verify(this.repository, atLeastOnce()).findById(ID_MOCK);
+		when(this.repository.findById(NUMBER_ONE)).thenReturn(Optional.empty());
+		assertThrows(EntityNotFoundException.class, () -> this.service.getData(NUMBER_ONE));
+		verify(this.repository, atLeastOnce()).findById(NUMBER_ONE);
 	}
 }

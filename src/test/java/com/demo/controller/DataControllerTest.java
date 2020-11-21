@@ -41,28 +41,28 @@ public class DataControllerTest extends DemoTest {
 	public void getDataTest() throws Exception {
 		CacheableModel cacheableMock = getCacheableMock();
 
-		when(this.dataService.getData(ID_MOCK)).thenReturn(cacheableMock);
+		when(this.dataService.getData(NUMBER_ONE)).thenReturn(cacheableMock);
 
-		mvc.perform(MockMvcRequestBuilders.get(API_DATA_URI.concat(String.valueOf(ID_MOCK))))
+		mvc.perform(MockMvcRequestBuilders.get(API_DATA_URI.concat(String.valueOf(NUMBER_ONE))))
 				.andExpect(MockMvcResultMatchers.status().isOk());
-		verify(this.dataService, atLeastOnce()).getData(ID_MOCK);
+		verify(this.dataService, atLeastOnce()).getData(NUMBER_ONE);
 	}
 
 	@Test
 	public void getDataNoContentTest() throws Exception {
-		when(this.dataService.getData(ID_MOCK)).thenThrow(EntityNotFoundException.class);
+		when(this.dataService.getData(NUMBER_ONE)).thenThrow(EntityNotFoundException.class);
 
-		mvc.perform(MockMvcRequestBuilders.get(API_DATA_URI.concat(String.valueOf(ID_MOCK))))
+		mvc.perform(MockMvcRequestBuilders.get(API_DATA_URI.concat(String.valueOf(NUMBER_ONE))))
 				.andExpect(MockMvcResultMatchers.status().isNoContent());
-		verify(this.dataService, atLeastOnce()).getData(ID_MOCK);
+		verify(this.dataService, atLeastOnce()).getData(NUMBER_ONE);
 	}
 
 	@Test
 	public void getDataServiceUnavailableException() throws Exception {
-		when(this.dataService.getData(ID_MOCK)).thenThrow(ServiceUnavailable.class);
+		when(this.dataService.getData(NUMBER_ONE)).thenThrow(ServiceUnavailable.class);
 
-		mvc.perform(MockMvcRequestBuilders.get(API_DATA_URI.concat(String.valueOf(ID_MOCK))))
+		mvc.perform(MockMvcRequestBuilders.get(API_DATA_URI.concat(String.valueOf(NUMBER_ONE))))
 				.andExpect(MockMvcResultMatchers.status().is5xxServerError());
-		verify(this.dataService, atLeastOnce()).getData(ID_MOCK);
+		verify(this.dataService, atLeastOnce()).getData(NUMBER_ONE);
 	}
 }

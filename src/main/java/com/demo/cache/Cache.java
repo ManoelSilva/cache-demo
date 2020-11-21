@@ -16,7 +16,7 @@ public class Cache {
 		return cacheInstance;
 	}
 
-	public CacheableModel getSingleCacheable(String cacheableClassName, Integer id, final CacheableActions action) {
+	public CacheableModel getSingleCacheable(String cacheableClassName, Integer id, final CacheableAction action) {
 		Long currentTime = System.currentTimeMillis();
 		if (this.isSetCachedNeeded(cacheableClassName, id, currentTime)) {
 			this.timestamp = currentTime;
@@ -25,7 +25,7 @@ public class Cache {
 		return this.getCached(cacheableClassName);
 	}
 
-	protected boolean isSetCachedNeeded(String cacheableClassName, Integer id, Long currentTime) {
+	private boolean isSetCachedNeeded(String cacheableClassName, Integer id, Long currentTime) {
 		return this.isFirstTimeCache(cacheableClassName) || this.isCachedNotTheSameAsRequested(cacheableClassName, id)
 				|| this.isCurrentTimeMinusCacheTimestampGreatherThanCacheTimeCriteria(currentTime,
 						this.getCached(cacheableClassName));

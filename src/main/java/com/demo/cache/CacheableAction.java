@@ -1,5 +1,5 @@
 package com.demo.cache;
 
-public interface CacheableActions {
+public interface CacheableAction {
 	CacheableModel executeSingleFetch(Integer id);
 }
